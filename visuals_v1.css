@@ -1,0 +1,215 @@
+/* =====================================================================
+   visuals_v1.css  -  GENERAL LOOK ONLY (no functionality)
+   Fonts, colors, header, tabs, controls, tables, cards, hover effects.
+   Extracted + cleaned up from index_v8.html (stacked override layers
+   merged into one final set of rules).
+
+   Dark is the default. Light theme = put data-theme="light" on <html>.
+   Pair it with side-menu_v1.css for the left menu.
+
+   Class names it styles (add them to your other HTML, or rename here):
+     header, .brand, .status      page header
+     .page                        main content wrapper
+     .topline, h1, .sub, .controls   page title row + search/dropdown
+     .tabs, .tab(.active)         tab strip
+     .tablewrap, .tablehead       table card
+     table/th/td, .ticker, .company, .pos, .neg, .g, .r
+     .wadd (+ button)             "Add ticker" box + outlined button
+     .card, .badge, .note, footer
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ---------- colors + sizes (change here to re-theme everything) ---------- */
+:root{
+  --bg:#0a0a0a;            /* page */
+  --hdr:#0a0a0a;           /* header */
+  --panel:#161616;         /* cards + table body */
+  --th:#161616;            /* table header row */
+  --card:#202020;
+  --inp:#111111;           /* input background */
+  --filter:#202020;        /* search / dropdown background */
+  --border:#222222;
+  --line:#222222;          /* row dividers */
+  --hover:rgba(255,255,255,.05);
+  --hover-border:#2d2d2d;
+
+  --text:#e6e6e6;
+  --muted:#a3a3a3;         /* headers, subtitles */
+  --name:#8a8a8a;          /* company names */
+  --placeholder:#6f6f6f;
+  --ticker:#e6e6e6;
+
+  --green:#10b981;
+  --red:#ef5350;
+  --blue:#0db1f2;          /* focus ring */
+  --amber:#f6b43a;         /* notes, status dot */
+  --accent:#e0a82e;        /* gold (logo, icons) */
+  --accent-ui:#c29a3a;     /* softer gold (active tab, Add button) */
+
+  --ease:cubic-bezier(.4,0,.2,1);
+  --ctl-h:28px;            /* search / dropdown height */
+  --r-card:10px;
+  --r-ctl:8px;
+
+  color-scheme:dark;
+  font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:rgba(224,168,46,.19);
+}
+:root[data-theme="light"]{
+  --bg:#f4f5f7;  --hdr:#ffffff;  --panel:#ffffff;  --th:#f0f2f5;  --card:#e9ecf0;
+  --inp:#ffffff; --filter:#ffffff;
+  --border:#d9dce1; --line:#e6e8ec; --hover:#f3f5f8; --hover-border:#cfd3d9;
+  --text:#14171c; --muted:#5b6470; --name:#6b7480; --placeholder:#8a919b; --ticker:#14171c;
+  --green:#0a8f4a; --red:#d3302f; --blue:#0a7fd1; --amber:#b86e00; --accent-ui:#a67c1a;
+  color-scheme:light;
+}
+
+/* ---------- base ---------- */
+*{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent}
+:root[data-theme="light"] *{scrollbar-color:rgba(0,0,0,.18) transparent}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+::-webkit-scrollbar-track{background:transparent}
+:root[data-theme="light"] ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18)}
+body{margin:0;background:var(--bg);color:var(--text);font-size:13px}
+::selection{background:var(--blue);color:#000}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+
+/* ---------- page header ---------- */
+header{
+  height:62px;padding:0 14px;gap:10px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--hdr);border-bottom:1px solid var(--border);
+}
+.brand{font-size:19px;font-weight:700;letter-spacing:.02em}
+.brand .pls,.pls{color:var(--accent)}
+.status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--amber)}
+/* small square icon buttons (theme / refresh) */
+.icon-btn,#themeBtn,#refBtn{
+  width:22px;height:22px;padding:0;margin-left:4px;
+  background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--muted);font-size:13px;line-height:1;cursor:pointer;
+  transition:color .15s var(--ease),border-color .15s var(--ease);
+}
+.icon-btn:hover,#themeBtn:hover,#refBtn:hover{color:var(--text);border-color:var(--hover-border)}
+
+/* ---------- page wrapper + title row ---------- */
+.page{padding:17px 12px}
+@media(min-width:701px){.page{padding:22px 32px}}
+.topline{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+@media(max-width:700px){.topline{flex-direction:column}}
+h1{font-size:19px;font-weight:600;letter-spacing:0;line-height:1.2;margin:0 0 1px}
+.sub{font-size:11.5px;line-height:14px;margin:0;color:var(--muted)}
+.controls{display:flex;gap:9px;flex-wrap:wrap}
+
+/* ---------- inputs + dropdowns ---------- */
+input,select{
+  font:inherit;font-size:12px;color:var(--text);
+  height:var(--ctl-h);padding:0 10px;
+  background-color:var(--filter);
+  border:1px solid var(--border);border-radius:var(--r-ctl);
+  transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
+}
+input{width:104px}
+input::placeholder{color:var(--placeholder);opacity:1}
+input:hover,select:hover{border-color:var(--hover-border)}
+input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent)}
+select{
+  color:var(--placeholder);appearance:none;-webkit-appearance:none;padding-right:30px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23787b86' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+select option{color:var(--text);background:var(--inp)}
+@media(max-width:700px){input{width:100%}}
+
+/* "Add ticker" box: input + outlined gold button */
+.wadd{display:flex;align-items:center;gap:6px}
+.wadd input{width:130px;text-transform:uppercase}
+.wadd input::placeholder{text-transform:none}
+.wadd button{
+  height:23px;padding:0 12px;
+  background:transparent;color:var(--accent-ui);
+  border:1px solid var(--accent-ui);border-radius:var(--r-ctl);
+  font:inherit;font-size:11.5px;font-weight:600;line-height:1;cursor:pointer;
+  transition:background-color .15s var(--ease);
+}
+.wadd button:hover{background:color-mix(in srgb,var(--accent-ui) 12%,transparent)}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:4px;margin-bottom:15px;overflow:auto;border-bottom:1px solid var(--border)}
+.tab{
+  white-space:nowrap;background:transparent;border:0;border-bottom:2px solid transparent;border-radius:0;
+  padding:12px 16px;font:inherit;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;
+  transition:color .15s var(--ease),border-color .15s var(--ease);
+}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--text);border-bottom-color:var(--accent-ui)}
+
+/* ---------- table card ---------- */
+.tablewrap,.card{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--r-card);
+  box-shadow:0 1px 3px rgba(0,0,0,.2);overflow:auto;min-width:0;
+}
+.card{padding:10px}
+.card h3{margin:0 0 6px;font-size:13px;font-weight:600}
+.tablehead{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;border-bottom:1px solid var(--border)}
+.tablehead strong{font-size:12px;font-weight:400}
+.note{font-size:12px;color:var(--amber)}
+
+table{width:100%;border-collapse:collapse;min-width:760px}
+th{
+  position:sticky;top:0;z-index:5;                      /* header row stays visible while scrolling */
+  padding:7px 5px;text-align:right;white-space:nowrap;cursor:pointer;
+  font-size:11px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted);
+  background:var(--th);border-bottom:1px solid var(--border);
+  transition:color .15s var(--ease);
+}
+th:hover{color:var(--text)}
+th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
+th:first-child,td:first-child{padding-left:12px}
+td{
+  height:27px;padding:4px 5px;text-align:right;white-space:nowrap;
+  font-size:12px;line-height:1.25;font-variant-numeric:tabular-nums;
+  border-bottom:1px solid var(--line);
+}
+tbody tr{transition:background-color .12s var(--ease)}
+tbody tr:hover{background:var(--hover)}                 /* row hover */
+.ticker{font-weight:700;color:var(--ticker)}
+.company{font-size:11px;color:var(--name)}
+td:nth-child(2){overflow:hidden;text-overflow:ellipsis}
+.pos{color:var(--green)}
+.neg{color:var(--red)}
+/* soft tinted cells (breadth-style highlight) */
+td.g{background:color-mix(in srgb,var(--green) 25%,transparent);color:var(--green);font-weight:500}
+td.r{background:color-mix(in srgb,var(--red) 25%,transparent);color:var(--red);font-weight:500}
+tr:hover td.g{background:color-mix(in srgb,var(--green) 25%,transparent)}
+tr:hover td.r{background:color-mix(in srgb,var(--red) 25%,transparent)}
+/* thick line under pinned rows */
+tr.pinlast td{border-bottom:2px solid color-mix(in srgb,var(--muted) 55%,transparent)}
+
+/* ---------- small extras ---------- */
+.badge{font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 10px;border-radius:4px;border:1px solid}
+.badge.y{color:var(--green);background:color-mix(in srgb,var(--green) 15%,transparent)}
+.badge.n{color:var(--red);background:color-mix(in srgb,var(--red) 15%,transparent)}
+.badge.a{color:var(--amber);background:color-mix(in srgb,var(--amber) 15%,transparent)}
+
+.pill{padding:4px 14px;border-radius:14px;font:inherit;font-size:12px;cursor:pointer;background:var(--panel);border:1px solid var(--border);color:var(--muted)}
+.pill.on{color:var(--amber);border-color:var(--amber)}
+
+/* flat toolbar icon buttons (dim until hover) */
+.wtb{
+  height:var(--ctl-h);min-width:30px;padding:0 6px;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  background:none;border:0;border-radius:6px;font:inherit;font-size:12px;color:var(--muted);opacity:.55;cursor:pointer;
+  transition:opacity .15s var(--ease),color .15s var(--ease);
+}
+.wtb:hover,.wtb.open{opacity:1;color:var(--text)}
+.wtb svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* pop-up menu card */
+.wpop{background:var(--panel);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5);padding:10px 12px;font-size:11px;color:var(--text)}
+.wpop h6{margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+footer{display:flex;justify-content:flex-end;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--muted)}
